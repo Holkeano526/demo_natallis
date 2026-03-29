@@ -271,6 +271,24 @@ function cambiarOrden(columna) {
   cargarDashboard();
 }
 
+// 🌟 FUNCIÓN PARA LIMPIAR LA FECHA Y HORA EN LA TABLA
+function formatearFechaTabla(timestamp, textoOriginal) {
+  if (!timestamp) return textoOriginal;
+  const d = new Date(timestamp);
+  if (isNaN(d.getTime())) return textoOriginal;
+  
+  const dia = String(d.getDate()).padStart(2, '0');
+  const mes = String(d.getMonth() + 1).padStart(2, '0');
+  const anio = d.getFullYear();
+  let horas = d.getHours();
+  const ampm = horas >= 12 ? 'PM' : 'AM';
+  horas = horas % 12;
+  horas = horas ? horas : 12; 
+  const min = String(d.getMinutes()).padStart(2, '0');
+  
+  return `${dia}/${mes}/${anio} <br><span style="color:#6c757d; font-size: 12px;">${horas}:${min} ${ampm}</span>`;
+}
+
 function cargarDashboard() {
   let textoBusqueda = document.getElementById('buscarBoleta').value.toLowerCase().trim();
   let strDesde = document.getElementById('fechaDesde').value; let strHasta = document.getElementById('fechaHasta').value;
@@ -332,7 +350,7 @@ function cargarDashboard() {
 
   datosFiltradosGlobal = filtrados; paginaActual = 1; renderizarTablaPaginada();
 }
-
+      
 function getCategoriaBadge(cat) {
   let clase = "cat-default"; let icon = "category";
   if(cat === "Arreglo") { clase = "cat-arreglo"; icon = "content_cut"; }
@@ -353,12 +371,15 @@ function renderizarTablaPaginada() {
     let badgeMetodo = fila[7] === 'Yape' ? '<span class="badge-yape">YAPE</span>' : fila[7];
     let disableCheck = fila[5] === 'Entregado' ? 'disabled' : '';
     let badgeCategoria = getCategoriaBadge(fila[8]);
+    
+    // 🌟 APLICAMOS LA FUNCIÓN DE FECHA LIMPIA AQUÍ
+    let fechaLimpia = formatearFechaTabla(fila[6], fila[1]);
 
     htmlTabla += `
       <tr>
         <td><input type="checkbox" class="check-boleta" value="${fila[0]}" ${disableCheck}></td>
         <td><strong>${fila[0]}</strong></td>
-        <td>${fila[1]}</td>
+        <td>${fechaLimpia}</td>
         <td>${badgeCategoria}</td>
         <td>S/ ${fila[2].toFixed(2)}</td>
         <td>S/ ${fila[3].toFixed(2)}</td>
