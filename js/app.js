@@ -47,7 +47,10 @@ function intentarLogin(e) {
   const pwdInput = document.getElementById('inputPassword');
   const pwd = pwdInput.value;
   const btn = document.getElementById('btnAcceder');
+  const errorMsg = document.getElementById('loginErrorMsg');
   
+  if (errorMsg) errorMsg.style.display = 'none';
+
   btn.innerHTML = '<span class="material-symbols-rounded animate-spin">hourglass_empty</span> Verificando...';
   btn.disabled = true;
 
@@ -67,13 +70,7 @@ function intentarLogin(e) {
       authToken = ""; 
       sessionStorage.removeItem('natallisAuth');
       
-      Swal.fire({ 
-        icon: 'error', 
-        title: 'Acceso Denegado', 
-        text: err.message, 
-        confirmButtonColor: '#dc3545', 
-        confirmButtonText: 'Reintentar'
-      });
+      if (errorMsg) errorMsg.style.display = 'block';
       
       btn.innerHTML = 'Acceder al Sistema';
       btn.disabled = false;
@@ -359,7 +356,7 @@ function cargarDashboard() {
 
   datosFiltradosGlobal = filtrados; paginaActual = 1; renderizarTablaPaginada();
 }
-
+      
 function getCategoriaBadge(cat) {
   let clase = "cat-default"; let icon = "category";
   if(cat === "Arreglo") { clase = "cat-arreglo"; icon = "content_cut"; }
