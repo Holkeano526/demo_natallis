@@ -106,21 +106,22 @@ tbody tr:hover { background-color: rgba(255, 226, 44, 0.05); }
 .header-tabla-acciones { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; margin-bottom: 12px;}
 .header-tabla-acciones h3 { margin: 0; }
 .btn-bulk { width: auto; margin: 0; background-color: var(--dark-bg); color: white; padding: 10px 16px; font-size: 14px; }
-
 .ts-wrapper.single .ts-control { padding: 12px !important; border-radius: 8px !important; font-size: 15px !important; height: auto;}
 
-/* ESTILOS MEJORADOS PARA LA PANTALLA DE LOGIN */
+/* 🌟 ESTILOS DEL LOGIN ANIMADO Y ABSTRACTO */
 #loginOverlay {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  /* Fondo degradado animado */
-  background: linear-gradient(-45deg, #1f2328, #2b3035, #3a3f45, #1f2328);
-  background-size: 400% 400%;
-  animation: gradientBG 12s ease infinite;
+  /* Fondo mesh degradado animado */
+  background: 
+    radial-gradient(circle at 15% 50%, rgba(255, 226, 44, 0.15), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(255, 226, 44, 0.1), transparent 25%),
+    linear-gradient(-45deg, #1f2328, #2b3035, #1a1e22, #2b3035);
+  background-size: 400% 400%, 400% 400%, 400% 400%;
+  animation: gradientBG 15s ease infinite;
   display: flex; justify-content: center; align-items: center;
   z-index: 9999;
 }
 
-/* Animación del fondo */
 @keyframes gradientBG {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -128,20 +129,19 @@ tbody tr:hover { background-color: rgba(255, 226, 44, 0.05); }
 }
 
 .login-box {
-  /* Efecto cristal (Glassmorphism) */
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  /* Efecto cristal (Glassmorphism) elegante */
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   padding: 45px 35px; border-radius: 20px;
   width: 90%; max-width: 400px; text-align: center;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
   /* Animación de entrada flotante */
-  animation: floatIn 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: floatIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Animación de la cajita de login */
 @keyframes floatIn {
-  from { opacity: 0; transform: translateY(30px); }
+  from { opacity: 0; transform: translateY(40px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
