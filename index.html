@@ -29,6 +29,7 @@
       
       .material-symbols-rounded { font-size: 1.2em; vertical-align: bottom; }
 
+      /* Pestañas */
       .tabs { display: flex; flex-wrap: wrap; margin-bottom: 25px; border-bottom: 2px solid var(--border-color); }
       .tab { flex: 1; min-width: 140px; padding: 15px 10px; text-align: center; cursor: pointer; font-weight: 600; color: #6c757d; transition: all 0.3s ease;}
       .tab:hover { color: var(--dark-text); background-color: rgba(255, 226, 44, 0.1); }
@@ -36,6 +37,7 @@
       .tab-content { display: none; }
       .tab-content.active { display: block; }
       
+      /* Formularios */
       .form-group { margin-bottom: 15px; }
       label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; color: #444;}
       .small-label { font-size: 12px; color: #666; font-weight: 700; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;}
@@ -52,6 +54,7 @@
       .btn-editar { background-color: var(--dark-bg); color: white; padding: 6px 12px; font-size: 13px; margin-top: 0; width: auto; display: inline-flex;}
       .btn-editar:hover { background-color: #1a1e22; }
       
+      /* Tarjetas de Resumen */
       .resumen-cards { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
       .card { flex: 1; min-width: calc(33.333% - 15px); padding: 18px; text-align: center; border-radius: 12px; font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.05); box-sizing: border-box;}
       .card-info { background-color: #f8f9fa; color: var(--dark-text); border: 1px solid var(--border-color); }
@@ -67,6 +70,7 @@
       .cat-summary-card .cat-name { font-weight: 600; color: var(--dark-text); font-size: 14px; display: flex; align-items: center; gap: 8px;}
       .cat-summary-card .cat-amount { font-weight: 700; color: var(--success); font-size: 16px;}
       
+      /* Tabla Responsive */
       .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; border: 1px solid var(--border-color); background: white;}
       table { width: 100%; min-width: 950px; border-collapse: collapse; font-size: 14px; }
       th, td { padding: 14px 12px; border-bottom: 1px solid var(--border-color); text-align: left; }
@@ -78,11 +82,13 @@
       tbody tr { transition: background-color 0.2s; }
       tbody tr:hover { background-color: rgba(255, 226, 44, 0.05); }
       
+      /* Paginación */
       .paginacion-container { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 20px; }
       .btn-pag { width: auto; margin: 0; padding: 8px 14px; font-size: 14px; background-color: white; color: var(--dark-text); border: 1px solid var(--border-color); border-radius: 6px; font-weight: 600; }
       .btn-pag:hover { background-color: var(--gray-light); }
       .btn-pag.active { background-color: var(--primary); border-color: var(--primary); box-shadow: none; transform: none;}
       
+      /* Badges y Categorías */
       .badge-yape { background-color: #742581; color: white; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; }
       .estado-badge { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; }
       .estado-entregado { background-color: #d1e7dd; color: #0f5132; }
@@ -102,6 +108,7 @@
       .label-efectivo { color: var(--success); }
       .label-yape { color: #742581; }
       
+      /* Modal */
       .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; }
       .modal-overlay.active { display: flex; }
       .modal-box { background: white; padding: 25px; border-radius: 12px; width: 90%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
@@ -116,6 +123,19 @@
       
       .ts-wrapper.single .ts-control { padding: 12px !important; border-radius: 8px !important; font-size: 15px !important; height: auto;}
 
+      #loginOverlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: var(--dark-bg);
+        display: flex; justify-content: center; align-items: center;
+        z-index: 9999;
+      }
+      .login-box {
+        background: white; padding: 40px 30px; border-radius: 16px;
+        width: 90%; max-width: 400px; text-align: center;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+      #appContent { display: none; } /* Ocultamos la app por defecto */
+
       @media (max-width: 768px) {
         body { padding: 10px; }
         .container { padding: 15px; }
@@ -128,138 +148,157 @@
     </style>
   </head>
   <body>
-    <div class="container">
-      
-      <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 25px; border-bottom: 2px solid var(--border-color); padding-bottom: 15px; flex-wrap: wrap; text-align: center;">
-        <img src="https://github.com/Holkeano526/demo_natallis/blob/main/natallis_icono%20(1).png?raw=true" alt="Natallis Logo" style="height: 60px; width: auto; border-radius: 8px;">
-        <h1 style="margin: 0; font-weight: 700; color: var(--dark-text); font-size: clamp(1.5rem, 4vw, 2.2rem);">Registro de Boletas Sastrería Natallis</h1>
-      </div>
-      
-      <div class="tabs">
-        <div class="tab active" onclick="cambiarTab(0)">
-          <span class="material-symbols-rounded">add_circle</span> Nuevo Ingreso
-        </div>
-        <div class="tab" onclick="cambiarTab(1)">
-          <span class="material-symbols-rounded">dashboard</span> Dashboard & Resumen
-        </div>
-      </div>
 
-      <div id="tab0" class="tab-content active">
-        <h2><span class="material-symbols-rounded" style="color: var(--dark-text); font-size: 1.5em;">receipt_long</span> Registro de Boleta</h2>
-        <form id="formularioSastreria" onsubmit="enviarDatos(event)" style="max-width: 500px; margin: auto; padding-top: 15px;">
-          <div class="form-group"><label>N° de Boleta:</label><input type="number" id="boleta" required onkeydown="return !['e', 'E', '+', '-'].includes(event.key)"></div>
-          
-          <div class="form-group">
-            <label>Categoría de Trabajo:</label>
-            <select id="categoria" required>
-              <option value="" disabled selected>Seleccione una categoría...</option>
-              <option value="Arreglo">Arreglo</option>
-              <option value="Bordado">Bordado</option>
-              <option value="Teñido">Teñido</option>
-              <option value="Venta de ropa">Venta de ropa</option>
-            </select>
-          </div>
-
-          <div class="form-group"><label>Precio Total (S/):</label><input type="number" id="precio" step="0.10" required onkeydown="return !['e', 'E', '+', '-'].includes(event.key)"></div>
-          
-          <div class="form-group"><label>A Cuenta (S/):</label><input type="number" id="acuenta" step="0.10" value="0" required onkeydown="return !['e', 'E', '+', '-'].includes(event.key)"></div>
-          
-          <div class="form-group">
-            <label>Método de Pago:</label>
-            <div class="metodo-toggle">
-              <input type="radio" name="metodoRegistro" id="regEfectivo" value="Efectivo" checked>
-              <label for="regEfectivo" class="label-efectivo"><span class="material-symbols-rounded">payments</span> Efectivo</label>
-              
-              <input type="radio" name="metodoRegistro" id="regYape" value="Yape">
-              <label for="regYape" class="label-yape"><span class="material-symbols-rounded">smartphone</span> YAPE</label>
-            </div>
-          </div>
-
-          <button type="submit" id="btnGuardar">
-            <span class="material-symbols-rounded">save</span> Guardar Registro
-          </button>
-        </form>
-      </div>
-
-      <div id="tab1" class="tab-content">
-        <div class="panel-filtros" style="border-left: 4px solid var(--success);">
-          <h3 style="margin-bottom: 15px; color: var(--success); justify-content: flex-start;">
-            <span class="material-symbols-rounded">check_circle</span> Marcar como Entregada
-          </h3>
-          <div class="form-group">
-            <select id="boletaEntrega" placeholder="🔍 Buscar N° de boleta pendiente..."></select>
-          </div>
-          <button onclick="entregarPrenda()" class="btn-secundario">
-            <span class="material-symbols-rounded">task_alt</span> Confirmar Entrega y Cobrar Saldo
-          </button>
-        </div>
-
-        <h3><span class="material-symbols-rounded">monitoring</span> Cuadre Semanal y Búsqueda</h3>
+    <div id="loginOverlay">
+      <div class="login-box">
+        <img src="/logo-natallis.png" onerror="this.src='https://i.ibb.net/qN72mPq/logo-natallis.png'" alt="Natallis Logo" style="height: 70px; margin-bottom: 20px;">
+        <h2 style="margin-bottom: 5px;">Bienvenido</h2>
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 25px;">Ingresa tu contraseña para acceder al sistema.</p>
         
-        <div class="panel-filtros">
-          <div class="flex-row" style="align-items: flex-end;">
-            <div class="flex-item" style="flex: 2; min-width: 250px;">
-              <label class="small-label"><span class="material-symbols-rounded" style="font-size: 14px;">search</span> Buscar Boleta o Categoría:</label>
-              <input type="text" id="buscarBoleta" oninput="buscarConRetraso()" placeholder="N° Boleta o Categoría...">
-            </div>
-            <div class="flex-item">
-              <label class="small-label">Desde (Lunes):</label>
-              <input type="date" id="fechaDesde" onchange="cargarDashboard()">
-            </div>
-            <div class="flex-item">
-              <label class="small-label">Hasta (Domingo):</label>
-              <input type="date" id="fechaHasta" onchange="cargarDashboard()">
-            </div>
-            <div class="flex-item" style="flex: 0.5;">
-              <button class="btn-secundario" onclick="limpiarFechas()"><span class="material-symbols-rounded">calendar_month</span> Todo</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="resumen-cards">
-          <div class="card card-info">Boletas Filtradas<br><span id="countTotal">0</span></div>
-          <div class="card card-info">Ya Recogieron<br><span id="countEntregado" style="color: var(--success);">0</span></div>
-          <div class="card card-info">Faltan Recoger<br><span id="countPendiente" style="color: var(--danger);">0</span></div>
-        </div>
-
-        <div class="resumen-cards" style="margin-bottom: 5px;">
-          <div class="card card-highlight" title="Suma de todos los Precios Totales filtrados">Total Ventas (Devengado)<br><span id="sumTotalVentas">S/ 0.00</span></div>
-          <div class="card card-dark" title="Suma de Adelantos y Saldos ya cobrados">Ingresos en Caja (Real)<br><span id="sumIngresosReales" class="text-primary">S/ 0.00</span></div>
-          <div class="card card-dark" title="Suma de Saldos pendientes por recoger">Por Cobrar (Pendiente)<br><span id="sumPorCobrar" class="text-danger">S/ 0.00</span></div>
-        </div>
-
-        <h3 style="margin-top: 15px; margin-bottom: 15px;"><span class="material-symbols-rounded">pie_chart</span> Ingresos por Categoría</h3>
-        <div id="resumenCategorias" class="resumen-categorias-grid"></div>
-
-        <div class="header-tabla-acciones">
-          <h3><span class="material-symbols-rounded">list_alt</span> Lista de Boletas</h3>
-          <button class="btn-bulk" onclick="marcarSeleccionados()"><span class="material-symbols-rounded">fact_check</span> Entregar Seleccionados</button>
-        </div>
-
-        <div class="table-responsive">
-          <table>
-            <thead>
-              <tr>
-                <th style="width: 40px;"><input type="checkbox" id="checkTodos" onclick="toggleTodos(this)"></th>
-                <th class="sortable" onclick="cambiarOrden('boleta')">Boleta <span id="icon-boleta" class="material-symbols-rounded sort-icon">swap_vert</span></th>
-                <th class="sortable" onclick="cambiarOrden('fecha')">Ingreso <span id="icon-fecha" class="material-symbols-rounded sort-icon">swap_vert</span></th>
-                <th class="sortable" onclick="cambiarOrden('categoria')">Categoría <span id="icon-categoria" class="material-symbols-rounded sort-icon">swap_vert</span></th>
-                <th class="sortable" onclick="cambiarOrden('total')">Total <span id="icon-total" class="material-symbols-rounded sort-icon">swap_vert</span></th>
-                <th>A Cuenta</th>
-                <th>Saldo</th>
-                <th class="sortable" onclick="cambiarOrden('metodo')">Método <span id="icon-metodo" class="material-symbols-rounded sort-icon">swap_vert</span></th>
-                <th class="sortable" onclick="cambiarOrden('estado')">Estado <span id="icon-estado" class="material-symbols-rounded sort-icon">swap_vert</span></th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="tablaCuerpo"></tbody>
-          </table>
-        </div>
-        <div class="paginacion-container" id="paginacionContainer"></div>
+        <form onsubmit="intentarLogin(event)">
+          <input type="password" id="inputPassword" placeholder="Contraseña secreta" required style="margin-bottom: 15px; text-align: center; letter-spacing: 2px;">
+          <button type="submit" id="btnAcceder">Acceder al Sistema</button>
+        </form>
       </div>
     </div>
 
-    <div class="modal-overlay" id="modalEditar">
+    <div id="appContent">
+      <div class="container">
+        
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; border-bottom: 2px solid var(--border-color); padding-bottom: 15px; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 15px;">
+            <img src="/logo-natallis.png" onerror="this.src='https://i.ibb.net/qN72mPq/logo-natallis.png'" alt="Natallis Logo" style="height: 50px; width: auto; border-radius: 8px;">
+            <h1 style="margin: 0; font-weight: 700; color: var(--dark-text); font-size: clamp(1.2rem, 3vw, 1.8rem);">Sastrería Natallis</h1>
+          </div>
+          <button onclick="cerrarSesion()" class="btn-secundario" style="width: auto; padding: 8px 15px; font-size: 13px; margin: 0;">
+            <span class="material-symbols-rounded" style="font-size: 18px;">logout</span> Salir
+          </button>
+        </div>
+        
+        <div class="tabs">
+          <div class="tab active" onclick="cambiarTab(0)">
+            <span class="material-symbols-rounded">add_circle</span> Nuevo Ingreso
+          </div>
+          <div class="tab" onclick="cambiarTab(1)">
+            <span class="material-symbols-rounded">dashboard</span> Dashboard & Resumen
+          </div>
+        </div>
+
+        <div id="tab0" class="tab-content active">
+          <h2><span class="material-symbols-rounded" style="color: var(--dark-text); font-size: 1.5em;">receipt_long</span> Registro de Boleta</h2>
+          <form id="formularioSastreria" onsubmit="enviarDatos(event)" style="max-width: 500px; margin: auto; padding-top: 15px;">
+            <div class="form-group"><label>N° de Boleta:</label><input type="number" id="boleta" required onkeydown="return !['e', 'E', '+', '-'].includes(event.key)"></div>
+            
+            <div class="form-group">
+              <label>Categoría de Trabajo:</label>
+              <select id="categoria" required>
+                <option value="" disabled selected>Seleccione una categoría...</option>
+                <option value="Arreglo">Arreglo</option>
+                <option value="Bordado">Bordado</option>
+                <option value="Teñido">Teñido</option>
+                <option value="Venta de ropa">Venta de ropa</option>
+              </select>
+            </div>
+
+            <div class="form-group"><label>Precio Total (S/):</label><input type="number" id="precio" step="0.10" required onkeydown="return !['e', 'E', '+', '-'].includes(event.key)"></div>
+            
+            <div class="form-group"><label>A Cuenta (S/):</label><input type="number" id="acuenta" step="0.10" value="0" required onkeydown="return !['e', 'E', '+', '-'].includes(event.key)"></div>
+            
+            <div class="form-group">
+              <label>Método de Pago:</label>
+              <div class="metodo-toggle">
+                <input type="radio" name="metodoRegistro" id="regEfectivo" value="Efectivo" checked>
+                <label for="regEfectivo" class="label-efectivo"><span class="material-symbols-rounded">payments</span> Efectivo</label>
+                
+                <input type="radio" name="metodoRegistro" id="regYape" value="Yape">
+                <label for="regYape" class="label-yape"><span class="material-symbols-rounded">smartphone</span> YAPE</label>
+              </div>
+            </div>
+
+            <button type="submit" id="btnGuardar">
+              <span class="material-symbols-rounded">save</span> Guardar Registro
+            </button>
+          </form>
+        </div>
+
+        <div id="tab1" class="tab-content">
+          <div class="panel-filtros" style="border-left: 4px solid var(--success);">
+            <h3 style="margin-bottom: 15px; color: var(--success); justify-content: flex-start;">
+              <span class="material-symbols-rounded">check_circle</span> Marcar como Entregada
+            </h3>
+            <div class="form-group">
+              <select id="boletaEntrega" placeholder="🔍 Buscar N° de boleta pendiente..."></select>
+            </div>
+            <button onclick="entregarPrenda()" class="btn-secundario">
+              <span class="material-symbols-rounded">task_alt</span> Confirmar Entrega y Cobrar Saldo
+            </button>
+          </div>
+
+          <h3><span class="material-symbols-rounded">monitoring</span> Cuadre Semanal y Búsqueda</h3>
+          
+          <div class="panel-filtros">
+            <div class="flex-row" style="align-items: flex-end;">
+              <div class="flex-item" style="flex: 2; min-width: 250px;">
+                <label class="small-label"><span class="material-symbols-rounded" style="font-size: 14px;">search</span> Buscar Boleta o Categoría:</label>
+                <input type="text" id="buscarBoleta" oninput="buscarConRetraso()" placeholder="N° Boleta o Categoría...">
+              </div>
+              <div class="flex-item">
+                <label class="small-label">Desde (Lunes):</label>
+                <input type="date" id="fechaDesde" onchange="cargarDashboard()">
+              </div>
+              <div class="flex-item">
+                <label class="small-label">Hasta (Domingo):</label>
+                <input type="date" id="fechaHasta" onchange="cargarDashboard()">
+              </div>
+              <div class="flex-item" style="flex: 0.5;">
+                <button class="btn-secundario" onclick="limpiarFechas()"><span class="material-symbols-rounded">calendar_month</span> Todo</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="resumen-cards">
+            <div class="card card-info">Boletas Filtradas<br><span id="countTotal">0</span></div>
+            <div class="card card-info">Ya Recogieron<br><span id="countEntregado" style="color: var(--success);">0</span></div>
+            <div class="card card-info">Faltan Recoger<br><span id="countPendiente" style="color: var(--danger);">0</span></div>
+          </div>
+
+          <div class="resumen-cards" style="margin-bottom: 5px;">
+            <div class="card card-highlight" title="Suma de todos los Precios Totales filtrados">Total Ventas (Devengado)<br><span id="sumTotalVentas">S/ 0.00</span></div>
+            <div class="card card-dark" title="Suma de Adelantos y Saldos ya cobrados">Ingresos en Caja (Real)<br><span id="sumIngresosReales" class="text-primary">S/ 0.00</span></div>
+            <div class="card card-dark" title="Suma de Saldos pendientes por recoger">Por Cobrar (Pendiente)<br><span id="sumPorCobrar" class="text-danger">S/ 0.00</span></div>
+          </div>
+
+          <h3 style="margin-top: 15px; margin-bottom: 15px;"><span class="material-symbols-rounded">pie_chart</span> Ingresos por Categoría</h3>
+          <div id="resumenCategorias" class="resumen-categorias-grid"></div>
+
+          <div class="header-tabla-acciones">
+            <h3><span class="material-symbols-rounded">list_alt</span> Lista de Boletas</h3>
+            <button class="btn-bulk" onclick="marcarSeleccionados()"><span class="material-symbols-rounded">fact_check</span> Entregar Seleccionados</button>
+          </div>
+
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 40px;"><input type="checkbox" id="checkTodos" onclick="toggleTodos(this)"></th>
+                  <th class="sortable" onclick="cambiarOrden('boleta')">Boleta <span id="icon-boleta" class="material-symbols-rounded sort-icon">swap_vert</span></th>
+                  <th class="sortable" onclick="cambiarOrden('fecha')">Ingreso <span id="icon-fecha" class="material-symbols-rounded sort-icon">swap_vert</span></th>
+                  <th class="sortable" onclick="cambiarOrden('categoria')">Categoría <span id="icon-categoria" class="material-symbols-rounded sort-icon">swap_vert</span></th>
+                  <th class="sortable" onclick="cambiarOrden('total')">Total <span id="icon-total" class="material-symbols-rounded sort-icon">swap_vert</span></th>
+                  <th>A Cuenta</th>
+                  <th>Saldo</th>
+                  <th class="sortable" onclick="cambiarOrden('metodo')">Método <span id="icon-metodo" class="material-symbols-rounded sort-icon">swap_vert</span></th>
+                  <th class="sortable" onclick="cambiarOrden('estado')">Estado <span id="icon-estado" class="material-symbols-rounded sort-icon">swap_vert</span></th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tablaCuerpo"></tbody>
+            </table>
+          </div>
+          <div class="paginacion-container" id="paginacionContainer"></div>
+        </div>
+      </div>
+    </div> <div class="modal-overlay" id="modalEditar">
       <div class="modal-box">
         <h3><span class="material-symbols-rounded">edit_square</span> Editar Boleta</h3>
         <form id="formEditar" onsubmit="guardarEdicion(event)">
@@ -293,6 +332,7 @@
 
     <script>
       const SCRIPT_URL = "/api/google"; 
+      let authToken = sessionStorage.getItem('natallisAuth') || ""; // Recupera la contraseña si ya ingresó
 
       let todosLosDatos = [];
       let boletasExistentes = []; 
@@ -310,7 +350,8 @@
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({ action: action, ...payload })
+          // Añadimos el password en cada petición
+          body: JSON.stringify({ action: action, password: authToken, ...payload })
         })
         .then(res => res.json())
         .then(res => {
@@ -320,21 +361,67 @@
       }
 
       document.addEventListener("DOMContentLoaded", function() {
-        establecerSemanaActual(); 
-        buscadorEntregas = new TomSelect("#boletaEntrega", { create: false, placeholder: "🔍 Buscar N° de boleta pendiente...", maxOptions: 200 });
-        cargarDatosDeFondo();
+        if (authToken !== "") {
+          verificarSesionYArrancar();
+        }
       });
 
-      function cargarDatosDeFondo() {
-        llamadaApi("obtenerRegistros", {}).then(datos => {
-          todosLosDatos = datos;
-          boletasExistentes = datos.map(fila => String(fila[0])); 
-          cargarDashboard();
-          actualizarBuscadorTomSelect();
-        }).catch(err => {
-            console.error("Error al cargar:", err);
-            cargarDashboard();
-        });
+      function intentarLogin(e) {
+        e.preventDefault();
+        const pwd = document.getElementById('inputPassword').value;
+        const btn = document.getElementById('btnAcceder');
+        
+        btn.innerHTML = '<span class="material-symbols-rounded animate-spin">hourglass_empty</span> Verificando...';
+        btn.disabled = true;
+
+        authToken = pwd; 
+
+        llamadaApi("obtenerRegistros", {})
+          .then(datos => {
+            sessionStorage.setItem('natallisAuth', authToken);
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('appContent').style.display = 'block';
+            
+            todosLosDatos = datos;
+            boletasExistentes = datos.map(fila => String(fila[0]));
+            arrancarApp();
+          })
+          .catch(err => {
+            authToken = ""; 
+            sessionStorage.removeItem('natallisAuth');
+            Swal.fire({ icon: 'error', title: 'Acceso Denegado', text: err.message, confirmButtonColor: '#2b3035' });
+            btn.innerHTML = 'Acceder al Sistema';
+            btn.disabled = false;
+          });
+      }
+
+      function verificarSesionYArrancar() {
+        llamadaApi("obtenerRegistros", {})
+          .then(datos => {
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('appContent').style.display = 'block';
+            todosLosDatos = datos;
+            boletasExistentes = datos.map(fila => String(fila[0]));
+            arrancarApp();
+          })
+          .catch(err => {
+            authToken = "";
+            sessionStorage.removeItem('natallisAuth');
+            document.getElementById('loginOverlay').style.display = 'flex';
+          });
+      }
+
+      function arrancarApp() {
+        establecerSemanaActual(); 
+        buscadorEntregas = new TomSelect("#boletaEntrega", { create: false, placeholder: "🔍 Buscar N° de boleta pendiente...", maxOptions: 200 });
+        cargarDashboard();
+        actualizarBuscadorTomSelect();
+      }
+
+      function cerrarSesion() {
+        authToken = "";
+        sessionStorage.removeItem('natallisAuth');
+        window.location.reload();
       }
 
       function establecerSemanaActual() {
