@@ -292,8 +292,8 @@
     </div>
 
     <script>
-      // 🚨 Pega aquí la NUEVA URL de tu aplicación web (Apps Script)
-      const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwjJbNTrZGRdG20_K8aCHKUzdN9_iu6ipp3WEYsp8B1VhrCAYUFDMgRgFVkupsqWhTk/exec"; 
+      // 🚨 PEGA AQUÍ TU NUEVA URL DE APPS SCRIPT 🚨
+      const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw5YK6IUsEUFwt96n3Biu2deVCm9wpsFQv8_kPsH-ELVfWxn9NAZoT820th_jv6QUnV/exec"; 
 
       let todosLosDatos = [];
       let boletasExistentes = []; 
@@ -305,24 +305,14 @@
       const filasPorPagina = 10;
       let ordenActual = { columna: 'fecha', ascendente: false };
 
-      // 🌟 MODIFICADO: Llamada API usa GET para evitar CORS
-      function llamadaApi(action, payload = {}) {
-        const params = new URLSearchParams();
-        params.append("action", action);
-        
-        for (const key in payload) {
-            if (typeof payload[key] === 'object') {
-                params.append(key, JSON.stringify(payload[key]));
-            } else {
-                params.append(key, payload[key]);
-            }
-        }
-
-        const urlConParametros = `${SCRIPT_URL}?${params.toString()}`;
-
-        return fetch(urlConParametros, {
-          method: "GET",
-          mode: "cors"
+      // 🌟 AQUÍ ESTÁ LA MAGIA QUE EVITA EL ERROR DE CORS 🌟
+      function llamadaApi(action, payload) {
+        return fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: action, ...payload }),
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8", // Esto engaña al navegador para que no bloquee la petición
+          }
         })
         .then(res => res.json())
         .then(res => {
@@ -338,14 +328,14 @@
       });
 
       function cargarDatosDeFondo() {
-        llamadaApi("obtenerRegistros").then(datos => {
+        llamadaApi("obtenerRegistros", {}).then(datos => {
           todosLosDatos = datos;
           boletasExistentes = datos.map(fila => String(fila[0])); 
-          cargarDashboard(); 
+          cargarDashboard();
           actualizarBuscadorTomSelect();
         }).catch(err => {
-            console.error("Error cargando datos:", err);
-            cargarDashboard(); // Fallback visual
+            console.error("Error al cargar:", err);
+            cargarDashboard();
         });
       }
 
@@ -432,10 +422,10 @@
       }
 
       function cargarDatosDesdeServidor() {
-        llamadaApi("obtenerRegistros").then(datos => {
+        llamadaApi("obtenerRegistros", {}).then(datos => {
           todosLosDatos = datos; boletasExistentes = datos.map(fila => String(fila[0])); 
           cargarDashboard(); actualizarBuscadorTomSelect(); 
-        }).catch(err => Swal.fire('Error de conexión', 'No se pudieron cargar los datos de la tabla.', 'error'));
+        }).catch(err => Swal.fire('Error de conexión', 'No se pudieron cargar los datos de la base de datos.', 'error'));
       }
 
       function actualizarBuscadorTomSelect() {
