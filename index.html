@@ -126,18 +126,41 @@
       
       .ts-wrapper.single .ts-control { padding: 12px !important; border-radius: 8px !important; font-size: 15px !important; height: auto;}
 
-      /* Estilos para la pantalla de Login */
       #loginOverlay {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background-color: var(--dark-bg);
+        /* Fondo degradado animado */
+        background: linear-gradient(-45deg, #1f2328, #2b3035, #3a3f45, #1f2328);
+        background-size: 400% 400%;
+        animation: gradientBG 12s ease infinite;
         display: flex; justify-content: center; align-items: center;
         z-index: 9999;
       }
-      .login-box {
-        background: white; padding: 40px 30px; border-radius: 16px;
-        width: 90%; max-width: 400px; text-align: center;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      
+      /* Animación del fondo */
+      @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
       }
+
+      .login-box {
+        /* Efecto cristal (Glassmorphism) */
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        padding: 45px 35px; border-radius: 20px;
+        width: 90%; max-width: 400px; text-align: center;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        /* Animación de entrada flotante */
+        animation: floatIn 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      /* Animación de la cajita de login */
+      @keyframes floatIn {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
       #appContent { display: none; } 
 
       @media (max-width: 768px) {
@@ -155,12 +178,12 @@
 
     <div id="loginOverlay">
       <div class="login-box">
-        <img src="https://i.imgur.com/tIb0QIp.png" alt="Natallis Logo" style="height: 70px; margin-bottom: 20px;">
+        <img src="https://i.imgur.com/tIb0QIp.png" alt="Natallis Logo" style="height: 75px; margin-bottom: 20px; drop-shadow: 0 4px 6px rgba(0,0,0,0.1);">
         <h2 style="margin-bottom: 5px;">Bienvenido</h2>
-        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 25px;">Ingresa tu contraseña para acceder al sistema.</p>
+        <p style="color: #6c757d; font-size: 14px; margin-bottom: 25px;">Acceso restringido al personal autorizado.</p>
         
         <form onsubmit="intentarLogin(event)">
-          <input type="password" id="inputPassword" placeholder="Contraseña secreta" required style="margin-bottom: 15px; text-align: center; letter-spacing: 2px;">
+          <input type="password" id="inputPassword" placeholder="Ingrese su contraseña" required style="margin-bottom: 15px; text-align: center; font-size: 15px;">
           <button type="submit" id="btnAcceder">Acceder al Sistema</button>
         </form>
       </div>
@@ -373,7 +396,8 @@
 
       function intentarLogin(e) {
         e.preventDefault();
-        const pwd = document.getElementById('inputPassword').value;
+        const pwdInput = document.getElementById('inputPassword');
+        const pwd = pwdInput.value;
         const btn = document.getElementById('btnAcceder');
         
         btn.innerHTML = '<span class="material-symbols-rounded animate-spin">hourglass_empty</span> Verificando...';
@@ -394,9 +418,19 @@
           .catch(err => {
             authToken = ""; 
             sessionStorage.removeItem('natallisAuth');
-            Swal.fire({ icon: 'error', title: 'Acceso Denegado', text: err.message, confirmButtonColor: '#2b3035' });
+            
+            Swal.fire({ 
+              icon: 'error', 
+              title: 'Login Incorrecto', 
+              text: 'La contraseña que ingresaste no es válida. Por favor, inténtalo de nuevo.', 
+              confirmButtonColor: '#2b3035',
+              confirmButtonText: 'Aceptar'
+            });
+            
             btn.innerHTML = 'Acceder al Sistema';
             btn.disabled = false;
+            pwdInput.value = ''; // Limpiar el input
+            pwdInput.focus();    // Volver a enfocar para escribir rápido
           });
       }
 
