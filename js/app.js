@@ -271,7 +271,6 @@ function cambiarOrden(columna) {
   cargarDashboard();
 }
 
-// 🌟 FUNCIÓN PARA LIMPIAR LA FECHA Y HORA EN LA TABLA
 function formatearFechaTabla(timestamp, textoOriginal) {
   if (!timestamp) return textoOriginal;
   const d = new Date(timestamp);
@@ -372,7 +371,6 @@ function renderizarTablaPaginada() {
     let disableCheck = fila[5] === 'Entregado' ? 'disabled' : '';
     let badgeCategoria = getCategoriaBadge(fila[8]);
     
-    // 🌟 APLICAMOS LA FUNCIÓN DE FECHA LIMPIA AQUÍ
     let fechaLimpia = formatearFechaTabla(fila[6], fila[1]);
 
     htmlTabla += `
