@@ -10,10 +10,11 @@
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.default.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet" />
 
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 
   </head>
   <body>
@@ -258,15 +259,16 @@
             arrancarApp();
           })
           .catch(err => {
+            // 🌟 POP-UP ESPECÍFICO DE ERROR DE LOGIN
             authToken = ""; 
             sessionStorage.removeItem('natallisAuth');
             
             Swal.fire({ 
               icon: 'error', 
               title: 'Login Incorrecto', 
-              text: 'La contraseña que ingresaste no es válida. Por favor, inténtalo de nuevo.', 
-              confirmButtonColor: '#2b3035',
-              confirmButtonText: 'Aceptar'
+              text: 'La contraseña ingresada no es válida.', 
+              confirmButtonColor: '#dc3545', // Rojo alerta
+              confirmButtonText: 'Reintentar'
             });
             
             btn.innerHTML = 'Acceder al Sistema';
