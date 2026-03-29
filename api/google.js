@@ -1,32 +1,42 @@
 export default async function handler(req, res) {
-
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyI6gcaiR4mEKGP594j3meC4QFiaQcgvT-3Bq5djbA0k69P3FgwoWSvff5plzQv8icM/exec";
-  
+  const GOOGLE_SCRIPT_URL = "AQUI_PEGA_TU_URL_DE_APPS_SCRIPT";
 
   const SECRET_PASSWORD = process.env.APP_PASSWORD;
 
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Método no permitido' });
+    return res.status(405).json({ status: "error", data: 'Método no permitido' });
   }
 
-  // Extraemos la contraseña que nos envía la página web
-  const { password, ...bodyData } = req.body;
+  const bodyData = req.body || {};
+  const password = bodyData.password;
+  delete bodyData.password; 
 
-  // EL GUARDIÁN: Comparamos las contraseñas
-  if (!SECRET_PASSWORD || password !== SECRET_PASSWORD) {
-    return res.status(401).json({ status: "error", data: "Contraseña incorrecta o no configurada." });
+  if (!SECRET_PASSWORD) {
+    return res.status(401).json({ status: "error", data: "Sistema no configurado: APP_PASSWORD ausente en Vercel." });
+  }
+
+  if (password !== SECRET_PASSWORD) {
+    return res.status(401).json({ status: "error", data: "Contraseña incorrecta." });
   }
 
   try {
     const googleResponse = await fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
-      body: JSON.stringify(bodyData) // Enviamos a Google los datos SIN la contraseña
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(bodyData)
     });
 
-    const data = await googleResponse.json();
-    res.status(200).json(data);
+    const textResponse = await googleResponse.text();
+    let data;
+    try {
+      data = JSON.parse(textResponse);
+    } catch (e) {
+      return res.status(500).json({ status: "error", data: "Error leyendo datos de Google: " + textResponse.substring(0, 80) });
+    }
+
+    return res.status(200).json(data);
     
   } catch (error) {
-    res.status(500).json({ status: "error", data: error.message });
+    return res.status(500).json({ status: "error", data: "Fallo en el servidor: " + error.message });
   }
 }
