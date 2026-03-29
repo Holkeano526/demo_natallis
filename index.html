@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Boletas - Sastrería Natallis</title>
+    
+    <link rel="icon" href="https://github.com/Holkeano526/demo_natallis/blob/main/natallis_icono%20(1).png?raw=true" type="image/png">
+    
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.default.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -123,6 +126,7 @@
       
       .ts-wrapper.single .ts-control { padding: 12px !important; border-radius: 8px !important; font-size: 15px !important; height: auto;}
 
+      /* Estilos para la pantalla de Login */
       #loginOverlay {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         background-color: var(--dark-bg);
@@ -134,7 +138,7 @@
         width: 90%; max-width: 400px; text-align: center;
         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
       }
-      #appContent { display: none; } /* Ocultamos la app por defecto */
+      #appContent { display: none; } 
 
       @media (max-width: 768px) {
         body { padding: 10px; }
@@ -151,7 +155,7 @@
 
     <div id="loginOverlay">
       <div class="login-box">
-        <img src="/logo-natallis.png" onerror="this.src='https://i.ibb.net/qN72mPq/logo-natallis.png'" alt="Natallis Logo" style="height: 70px; margin-bottom: 20px;">
+        <img src="https://github.com/Holkeano526/demo_natallis/blob/main/natallis_icono%20(1).png?raw=true" alt="Natallis Logo" style="height: 70px; margin-bottom: 20px;">
         <h2 style="margin-bottom: 5px;">Bienvenido</h2>
         <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 25px;">Ingresa tu contraseña para acceder al sistema.</p>
         
@@ -167,7 +171,7 @@
         
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; border-bottom: 2px solid var(--border-color); padding-bottom: 15px; flex-wrap: wrap;">
           <div style="display: flex; align-items: center; gap: 15px;">
-            <img src="/logo-natallis.png" onerror="this.src='https://i.ibb.net/qN72mPq/logo-natallis.png'" alt="Natallis Logo" style="height: 50px; width: auto; border-radius: 8px;">
+            <img src="https://github.com/Holkeano526/demo_natallis/blob/main/natallis_icono%20(1).png?raw=true" alt="Natallis Logo" style="height: 50px; width: auto; border-radius: 8px;">
             <h1 style="margin: 0; font-weight: 700; color: var(--dark-text); font-size: clamp(1.2rem, 3vw, 1.8rem);">Sastrería Natallis</h1>
           </div>
           <button onclick="cerrarSesion()" class="btn-secundario" style="width: auto; padding: 8px 15px; font-size: 13px; margin: 0;">
@@ -332,7 +336,7 @@
 
     <script>
       const SCRIPT_URL = "/api/google"; 
-      let authToken = sessionStorage.getItem('natallisAuth') || ""; // Recupera la contraseña si ya ingresó
+      let authToken = sessionStorage.getItem('natallisAuth') || ""; 
 
       let todosLosDatos = [];
       let boletasExistentes = []; 
@@ -350,7 +354,6 @@
           headers: {
             "Content-Type": "application/json"
           },
-          // Añadimos el password en cada petición
           body: JSON.stringify({ action: action, password: authToken, ...payload })
         })
         .then(res => res.json())
@@ -421,7 +424,7 @@
       function cerrarSesion() {
         authToken = "";
         sessionStorage.removeItem('natallisAuth');
-        window.location.reload();
+        window.location.reload(); 
       }
 
       function establecerSemanaActual() {
