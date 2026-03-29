@@ -1,5 +1,298 @@
-<script>
-      // 🚨 PEGA LA NUEVA URL DE TU APLICACIÓN WEB AQUÍ
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Boletas - Sastrería Natallis</title>
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.default.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet" />
+
+    <style>
+      :root {
+        --primary: #ffe22c;       
+        --primary-hover: #e6c817; 
+        --dark-text: #1f2328;     
+        --dark-bg: #2b3035;       
+        --gray-light: #f4f7f6;
+        --border-color: #e1e4e8;
+        --success: #28a745;
+        --danger: #dc3545;
+      }
+
+      body { font-family: 'Inter', sans-serif; padding: 15px; background-color: var(--gray-light); margin: 0; color: var(--dark-text); }
+      .container { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.04); box-sizing: border-box;}
+      h2, h3 { text-align: center; color: var(--dark-text); margin-top: 0; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;}
+      
+      .material-symbols-rounded { font-size: 1.2em; vertical-align: bottom; }
+
+      .tabs { display: flex; flex-wrap: wrap; margin-bottom: 25px; border-bottom: 2px solid var(--border-color); }
+      .tab { flex: 1; min-width: 140px; padding: 15px 10px; text-align: center; cursor: pointer; font-weight: 600; color: #6c757d; transition: all 0.3s ease;}
+      .tab:hover { color: var(--dark-text); background-color: rgba(255, 226, 44, 0.1); }
+      .tab.active { border-bottom: 3px solid var(--primary); color: var(--dark-text); margin-bottom: -2px; }
+      .tab-content { display: none; }
+      .tab-content.active { display: block; }
+      
+      .form-group { margin-bottom: 15px; }
+      label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; color: #444;}
+      .small-label { font-size: 12px; color: #666; font-weight: 700; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;}
+      
+      input, select { width: 100%; padding: 12px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; transition: border-color 0.3s, box-shadow 0.3s;}
+      input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255, 226, 44, 0.25);}
+      
+      button { width: 100%; padding: 12px; background-color: var(--primary); color: var(--dark-text); border: none; border-radius: 8px; font-size: 16px; cursor: pointer; margin-top: 10px; font-weight: 700; transition: all 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px;}
+      button:hover { background-color: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(255, 226, 44, 0.3); }
+      button:disabled { opacity: 0.7; cursor: not-allowed; transform: none; box-shadow: none; }
+      
+      .btn-secundario { background-color: var(--dark-bg); color: white; }
+      .btn-secundario:hover { background-color: #1a1e22; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+      .btn-editar { background-color: var(--dark-bg); color: white; padding: 6px 12px; font-size: 13px; margin-top: 0; width: auto; display: inline-flex;}
+      .btn-editar:hover { background-color: #1a1e22; }
+      
+      .resumen-cards { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
+      .card { flex: 1; min-width: calc(33.333% - 15px); padding: 18px; text-align: center; border-radius: 12px; font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.05); box-sizing: border-box;}
+      .card-info { background-color: #f8f9fa; color: var(--dark-text); border: 1px solid var(--border-color); }
+      .card-dark { background-color: var(--dark-bg); color: white; }
+      .card-highlight { background-color: var(--primary); color: var(--dark-text); }
+      .card span { font-size: 24px; display: block; margin-top: 8px; font-weight: 700;}
+      .card-dark span.text-primary { color: var(--primary); }
+      .card-dark span.text-danger { color: #ff6b6b; }
+
+      .resumen-categorias-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 30px; }
+      .cat-summary-card { background: white; border: 1px solid var(--border-color); border-radius: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: transform 0.2s;}
+      .cat-summary-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
+      .cat-summary-card .cat-name { font-weight: 600; color: var(--dark-text); font-size: 14px; display: flex; align-items: center; gap: 8px;}
+      .cat-summary-card .cat-amount { font-weight: 700; color: var(--success); font-size: 16px;}
+      
+      .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; border: 1px solid var(--border-color); background: white;}
+      table { width: 100%; min-width: 950px; border-collapse: collapse; font-size: 14px; }
+      th, td { padding: 14px 12px; border-bottom: 1px solid var(--border-color); text-align: left; }
+      th { background-color: #f8f9fa; color: #444; font-weight: 700; position: relative;}
+      th.sortable { cursor: pointer; transition: background-color 0.2s; user-select: none; }
+      th.sortable:hover { background-color: #e2e6ea; }
+      .sort-icon { font-size: 16px; vertical-align: middle; color: #adb5bd; margin-left: 2px;}
+      .sort-icon.active { color: var(--dark-text); font-weight: bold; }
+      tbody tr { transition: background-color 0.2s; }
+      tbody tr:hover { background-color: rgba(255, 226, 44, 0.05); }
+      
+      .paginacion-container { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 20px; }
+      .btn-pag { width: auto; margin: 0; padding: 8px 14px; font-size: 14px; background-color: white; color: var(--dark-text); border: 1px solid var(--border-color); border-radius: 6px; font-weight: 600; }
+      .btn-pag:hover { background-color: var(--gray-light); }
+      .btn-pag.active { background-color: var(--primary); border-color: var(--primary); box-shadow: none; transform: none;}
+      
+      .badge-yape { background-color: #742581; color: white; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+      .estado-badge { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+      .estado-entregado { background-color: #d1e7dd; color: #0f5132; }
+      .estado-pendiente { background-color: #f8d7da; color: #842029; }
+      
+      .cat-badge { padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;}
+      .cat-arreglo { background-color: #e0f2fe; color: #0284c7; }
+      .cat-bordado { background-color: #f3e8ff; color: #7e22ce; }
+      .cat-teñido { background-color: #ffedd5; color: #c2410c; }
+      .cat-ventaderopa { background-color: #dcfce7; color: #15803d; }
+      .cat-default { background-color: #f1f5f9; color: #475569; }
+
+      .metodo-toggle { display: flex; gap: 10px; }
+      .metodo-toggle label { flex: 1; text-align: center; padding: 12px; border: 1px solid #ccc; border-radius: 8px; cursor: pointer; font-size: 15px; font-weight: 600; transition: all 0.2s;}
+      .metodo-toggle input[type="radio"] { display: none; }
+      .metodo-toggle input[type="radio"]:checked + label { background-color: var(--gray-light); border-color: var(--dark-bg); border-width: 2px; box-shadow: inset 0 3px 5px rgba(0,0,0,0.05); }
+      .label-efectivo { color: var(--success); }
+      .label-yape { color: #742581; }
+      
+      .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; }
+      .modal-overlay.active { display: flex; }
+      .modal-box { background: white; padding: 25px; border-radius: 12px; width: 90%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+
+      .panel-filtros { background: white; padding: 18px; border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 20px;}
+      .flex-row { display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end;}
+      .flex-item { flex: 1; min-width: 140px; }
+      
+      .header-tabla-acciones { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; margin-bottom: 12px;}
+      .header-tabla-acciones h3 { margin: 0; }
+      .btn-bulk { width: auto; margin: 0; background-color: var(--dark-bg); color: white; padding: 10px 16px; font-size: 14px; }
+      
+      .ts-wrapper.single .ts-control { padding: 12px !important; border-radius: 8px !important; font-size: 15px !important; height: auto;}
+
+      @media (max-width: 768px) {
+        body { padding: 10px; }
+        .container { padding: 15px; }
+        .card { min-width: 100%; } 
+        .flex-row { flex-direction: column; align-items: stretch; gap: 12px;}
+        .flex-item { width: 100%; min-width: 100%; }
+        .btn-secundario, .btn-bulk { margin-top: 5px; width: 100%; }
+        .header-tabla-acciones { flex-direction: column; align-items: stretch; gap: 15px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      
+      <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 25px; border-bottom: 2px solid var(--border-color); padding-bottom: 15px; flex-wrap: wrap; text-align: center;">
+        <img src="https://i.ibb.net/qN72mPq/logo-natallis.png" alt="Natallis Logo" style="height: 60px; width: auto; border-radius: 8px;">
+        <h1 style="margin: 0; font-weight: 700; color: var(--dark-text); font-size: clamp(1.5rem, 4vw, 2.2rem);">Registro de Boletas Sastrería Natallis</h1>
+      </div>
+      
+      <div class="tabs">
+        <div class="tab active" onclick="cambiarTab(0)">
+          <span class="material-symbols-rounded">add_circle</span> Nuevo Ingreso
+        </div>
+        <div class="tab" onclick="cambiarTab(1)">
+          <span class="material-symbols-rounded">dashboard</span> Dashboard & Resumen
+        </div>
+      </div>
+
+      <div id="tab0" class="tab-content active">
+        <h2><span class="material-symbols-rounded" style="color: var(--dark-text); font-size: 1.5em;">receipt_long</span> Registro de Boleta</h2>
+        <form id="formularioSastreria" onsubmit="enviarDatos(event)" style="max-width: 500px; margin: auto; padding-top: 15px;">
+          <div class="form-group"><label>N° de Boleta:</label><input type="number" id="boleta" required onkeydown="return !['e', 'E', '+', '-'].includes(event.key)"></div>
+          
+          <div class="form-group">
+            <label>Categoría de Trabajo:</label>
+            <select id="categoria" required>
+              <option value="" disabled selected>Seleccione una categoría...</option>
+              <option value="Arreglo">Arreglo</option>
+              <option value="Bordado">Bordado</option>
+              <option value="Teñido">Teñido</option>
+              <option value="Venta de ropa">Venta de ropa</option>
+            </select>
+          </div>
+
+          <div class="form-group"><label>Precio Total (S/):</label><input type="number" id="precio" step="0.10" required onkeydown="return !['e', 'E', '+', '-'].includes(event.key)"></div>
+          
+          <div class="form-group"><label>A Cuenta (S/):</label><input type="number" id="acuenta" step="0.10" value="0" required onkeydown="return !['e', 'E', '+', '-'].includes(event.key)"></div>
+          
+          <div class="form-group">
+            <label>Método de Pago:</label>
+            <div class="metodo-toggle">
+              <input type="radio" name="metodoRegistro" id="regEfectivo" value="Efectivo" checked>
+              <label for="regEfectivo" class="label-efectivo"><span class="material-symbols-rounded">payments</span> Efectivo</label>
+              
+              <input type="radio" name="metodoRegistro" id="regYape" value="Yape">
+              <label for="regYape" class="label-yape"><span class="material-symbols-rounded">smartphone</span> YAPE</label>
+            </div>
+          </div>
+
+          <button type="submit" id="btnGuardar">
+            <span class="material-symbols-rounded">save</span> Guardar Registro
+          </button>
+        </form>
+      </div>
+
+      <div id="tab1" class="tab-content">
+        <div class="panel-filtros" style="border-left: 4px solid var(--success);">
+          <h3 style="margin-bottom: 15px; color: var(--success); justify-content: flex-start;">
+            <span class="material-symbols-rounded">check_circle</span> Marcar como Entregada
+          </h3>
+          <div class="form-group">
+            <select id="boletaEntrega" placeholder="🔍 Buscar N° de boleta pendiente..."></select>
+          </div>
+          <button onclick="entregarPrenda()" class="btn-secundario">
+            <span class="material-symbols-rounded">task_alt</span> Confirmar Entrega y Cobrar Saldo
+          </button>
+        </div>
+
+        <h3><span class="material-symbols-rounded">monitoring</span> Cuadre Semanal y Búsqueda</h3>
+        
+        <div class="panel-filtros">
+          <div class="flex-row" style="align-items: flex-end;">
+            <div class="flex-item" style="flex: 2; min-width: 250px;">
+              <label class="small-label"><span class="material-symbols-rounded" style="font-size: 14px;">search</span> Buscar Boleta o Categoría:</label>
+              <input type="text" id="buscarBoleta" oninput="buscarConRetraso()" placeholder="N° Boleta o Categoría...">
+            </div>
+            <div class="flex-item">
+              <label class="small-label">Desde (Lunes):</label>
+              <input type="date" id="fechaDesde" onchange="cargarDashboard()">
+            </div>
+            <div class="flex-item">
+              <label class="small-label">Hasta (Domingo):</label>
+              <input type="date" id="fechaHasta" onchange="cargarDashboard()">
+            </div>
+            <div class="flex-item" style="flex: 0.5;">
+              <button class="btn-secundario" onclick="limpiarFechas()"><span class="material-symbols-rounded">calendar_month</span> Todo</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="resumen-cards">
+          <div class="card card-info">Boletas Filtradas<br><span id="countTotal">0</span></div>
+          <div class="card card-info">Ya Recogieron<br><span id="countEntregado" style="color: var(--success);">0</span></div>
+          <div class="card card-info">Faltan Recoger<br><span id="countPendiente" style="color: var(--danger);">0</span></div>
+        </div>
+
+        <div class="resumen-cards" style="margin-bottom: 5px;">
+          <div class="card card-highlight" title="Suma de todos los Precios Totales filtrados">Total Ventas (Devengado)<br><span id="sumTotalVentas">S/ 0.00</span></div>
+          <div class="card card-dark" title="Suma de Adelantos y Saldos ya cobrados">Ingresos en Caja (Real)<br><span id="sumIngresosReales" class="text-primary">S/ 0.00</span></div>
+          <div class="card card-dark" title="Suma de Saldos pendientes por recoger">Por Cobrar (Pendiente)<br><span id="sumPorCobrar" class="text-danger">S/ 0.00</span></div>
+        </div>
+
+        <h3 style="margin-top: 15px; margin-bottom: 15px;"><span class="material-symbols-rounded">pie_chart</span> Ingresos por Categoría</h3>
+        <div id="resumenCategorias" class="resumen-categorias-grid"></div>
+
+        <div class="header-tabla-acciones">
+          <h3><span class="material-symbols-rounded">list_alt</span> Lista de Boletas</h3>
+          <button class="btn-bulk" onclick="marcarSeleccionados()"><span class="material-symbols-rounded">fact_check</span> Entregar Seleccionados</button>
+        </div>
+
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 40px;"><input type="checkbox" id="checkTodos" onclick="toggleTodos(this)"></th>
+                <th class="sortable" onclick="cambiarOrden('boleta')">Boleta <span id="icon-boleta" class="material-symbols-rounded sort-icon">swap_vert</span></th>
+                <th class="sortable" onclick="cambiarOrden('fecha')">Ingreso <span id="icon-fecha" class="material-symbols-rounded sort-icon">swap_vert</span></th>
+                <th class="sortable" onclick="cambiarOrden('categoria')">Categoría <span id="icon-categoria" class="material-symbols-rounded sort-icon">swap_vert</span></th>
+                <th class="sortable" onclick="cambiarOrden('total')">Total <span id="icon-total" class="material-symbols-rounded sort-icon">swap_vert</span></th>
+                <th>A Cuenta</th>
+                <th>Saldo</th>
+                <th class="sortable" onclick="cambiarOrden('metodo')">Método <span id="icon-metodo" class="material-symbols-rounded sort-icon">swap_vert</span></th>
+                <th class="sortable" onclick="cambiarOrden('estado')">Estado <span id="icon-estado" class="material-symbols-rounded sort-icon">swap_vert</span></th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaCuerpo"></tbody>
+          </table>
+        </div>
+        <div class="paginacion-container" id="paginacionContainer"></div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="modalEditar">
+      <div class="modal-box">
+        <h3><span class="material-symbols-rounded">edit_square</span> Editar Boleta</h3>
+        <form id="formEditar" onsubmit="guardarEdicion(event)">
+          <input type="hidden" id="editBoletaOriginal">
+          <div class="form-group"><label>N° Boleta:</label><input type="number" id="editBoletaNueva" required onkeydown="return !['e', 'E', '+', '-'].includes(event.key)"></div>
+          <div class="form-group">
+            <label>Categoría:</label>
+            <select id="editCategoria" required>
+              <option value="Arreglo">Arreglo</option>
+              <option value="Bordado">Bordado</option>
+              <option value="Teñido">Teñido</option>
+              <option value="Venta de ropa">Venta de ropa</option>
+              <option value="Sin categoría">Sin categoría</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Precio Total:</label><input type="number" id="editPrecio" step="0.10" required onkeydown="return !['e', 'E', '+', '-'].includes(event.key)"></div>
+          <div class="form-group"><label>A Cuenta:</label><input type="number" id="editAcuenta" step="0.10" required onkeydown="return !['e', 'E', '+', '-'].includes(event.key)"></div>
+          <div class="form-group">
+            <label>Método de Pago:</label>
+            <select id="editMetodo">
+              <option value="Efectivo">Efectivo</option>
+              <option value="Yape">Yape</option>
+              <option value="-">- Ninguno -</option>
+            </select>
+          </div>
+          <button type="submit"><span class="material-symbols-rounded">sync</span> Guardar Cambios</button>
+          <button type="button" class="btn-secundario" onclick="cerrarModal()"><span class="material-symbols-rounded">close</span> Cancelar</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // 🚨 Pega aquí la NUEVA URL de tu aplicación web (Apps Script)
       const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwjJbNTrZGRdG20_K8aCHKUzdN9_iu6ipp3WEYsp8B1VhrCAYUFDMgRgFVkupsqWhTk/exec"; 
 
       let todosLosDatos = [];
@@ -12,15 +305,12 @@
       const filasPorPagina = 10;
       let ordenActual = { columna: 'fecha', ascendente: false };
 
-      // 🌟 MODIFICADO: Ahora hace peticiones GET para burlar el bloqueo CORS
+      // 🌟 MODIFICADO: Llamada API usa GET para evitar CORS
       function llamadaApi(action, payload = {}) {
-        // Convertir el payload a formato URL
         const params = new URLSearchParams();
         params.append("action", action);
         
-        // Agregar los datos extras si existen
         for (const key in payload) {
-            // Apps Script lee mejor strings en GET, así que convertimos objetos a JSON string
             if (typeof payload[key] === 'object') {
                 params.append(key, JSON.stringify(payload[key]));
             } else {
@@ -32,7 +322,7 @@
 
         return fetch(urlConParametros, {
           method: "GET",
-          mode: "cors" // Modo explícito para permitir CORS
+          mode: "cors"
         })
         .then(res => res.json())
         .then(res => {
@@ -54,9 +344,8 @@
           cargarDashboard(); 
           actualizarBuscadorTomSelect();
         }).catch(err => {
-            console.error("Error cargando datos de fondo:", err);
-            // Fallback: intentar cargar dashboard de todas formas
-            cargarDashboard();
+            console.error("Error cargando datos:", err);
+            cargarDashboard(); // Fallback visual
         });
       }
 
@@ -354,3 +643,5 @@
         contenedor.innerHTML = html;
       }
     </script>
+  </body>
+</html>
