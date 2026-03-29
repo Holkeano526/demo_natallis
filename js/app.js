@@ -19,10 +19,20 @@ function llamadaApi(action, payload = {}) {
     },
     body: JSON.stringify({ action: action, password: authToken, ...payload })
   })
-  .then(res => res.json())
-  .then(res => {
-    if (res.status === "error") throw new Error(res.data);
-    return res.data;
+  .then(async res => {
+    const textResponse = await res.text();
+    let data;
+    try {
+      data = JSON.parse(textResponse);
+    } catch (err) {
+      throw new Error("Respuesta no válida del servidor.");
+    }
+    
+    if (!res.ok || data.status === "error") {
+      throw new Error(data.data || "Error desconocido");
+    }
+    
+    return data.data;
   });
 }
 
@@ -59,8 +69,8 @@ function intentarLogin(e) {
       
       Swal.fire({ 
         icon: 'error', 
-        title: 'Login Incorrecto', 
-        text: 'La contraseña ingresada no es válida.', 
+        title: 'Acceso Denegado', 
+        text: err.message, 
         confirmButtonColor: '#dc3545', 
         confirmButtonText: 'Reintentar'
       });
@@ -349,7 +359,7 @@ function cargarDashboard() {
 
   datosFiltradosGlobal = filtrados; paginaActual = 1; renderizarTablaPaginada();
 }
-      
+
 function getCategoriaBadge(cat) {
   let clase = "cat-default"; let icon = "category";
   if(cat === "Arreglo") { clase = "cat-arreglo"; icon = "content_cut"; }
@@ -370,7 +380,6 @@ function renderizarTablaPaginada() {
     let badgeMetodo = fila[7] === 'Yape' ? '<span class="badge-yape">YAPE</span>' : fila[7];
     let disableCheck = fila[5] === 'Entregado' ? 'disabled' : '';
     let badgeCategoria = getCategoriaBadge(fila[8]);
-    
     let fechaLimpia = formatearFechaTabla(fila[6], fila[1]);
 
     htmlTabla += `
