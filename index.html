@@ -292,8 +292,8 @@
     </div>
 
     <script>
-      // 🚨 PEGA AQUÍ TU NUEVA URL DE APPS SCRIPT 🚨
-      const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw5YK6IUsEUFwt96n3Biu2deVCm9wpsFQv8_kPsH-ELVfWxn9NAZoT820th_jv6QUnV/exec"; 
+      // 🌟 Aquí está la clave: Ya no apunta a Google, apunta a nuestro servidor seguro en Vercel
+      const SCRIPT_URL = "/api/google"; 
 
       let todosLosDatos = [];
       let boletasExistentes = []; 
@@ -305,14 +305,14 @@
       const filasPorPagina = 10;
       let ordenActual = { columna: 'fecha', ascendente: false };
 
-      // 🌟 AQUÍ ESTÁ LA MAGIA QUE EVITA EL ERROR DE CORS 🌟
-      function llamadaApi(action, payload) {
+      // 🌟 Llamada API conectada a Vercel (Adiós CORS)
+      function llamadaApi(action, payload = {}) {
         return fetch(SCRIPT_URL, {
           method: "POST",
-          body: JSON.stringify({ action: action, ...payload }),
           headers: {
-            "Content-Type": "text/plain;charset=utf-8", // Esto engaña al navegador para que no bloquee la petición
-          }
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ action: action, ...payload })
         })
         .then(res => res.json())
         .then(res => {
