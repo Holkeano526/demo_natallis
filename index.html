@@ -292,7 +292,6 @@
     </div>
 
     <script>
-      // 🌟 Aquí está la clave: Ya no apunta a Google, apunta a nuestro servidor seguro en Vercel
       const SCRIPT_URL = "/api/google"; 
 
       let todosLosDatos = [];
@@ -305,7 +304,6 @@
       const filasPorPagina = 10;
       let ordenActual = { columna: 'fecha', ascendente: false };
 
-      // 🌟 Llamada API conectada a Vercel (Adiós CORS)
       function llamadaApi(action, payload = {}) {
         return fetch(SCRIPT_URL, {
           method: "POST",
