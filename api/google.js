@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
-  // 🚨 PEGA AQUÍ TU URL DE APPS SCRIPT (Esta URL ya será invisible para los usuarios)
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw5YK6IUsEUFwt96n3Biu2deVCm9wpsFQv8_kPsH-ELVfWxn9NAZoT820th_jv6QUnV/exec";
+  // 🚨 PEGA AQUÍ LA URL DE TU "NUEVA IMPLEMENTACIÓN" DE APPS SCRIPT
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyI6gcaiR4mEKGP594j3meC4QFiaQcgvT-3Bq5djbA0k69P3FgwoWSvff5plzQv8icM/exec";
 
   // Solo aceptamos peticiones POST
   if (req.method !== 'POST') {
