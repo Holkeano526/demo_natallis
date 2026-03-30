@@ -97,7 +97,7 @@ function verificarSesionYArrancar() {
 
 function arrancarApp() {
   establecerSemanaActual(); 
-  buscadorEntregas = new TomSelect("#boletaEntrega", { create: false, placeholder: "🔍 Buscar N° de boleta pendiente...", maxOptions: 200 });
+  buscadorEntregas = new TomSelect("#boletaEntrega", { create: false, placeholder: "Buscar N° de boleta pendiente...", maxOptions: 200 });
   cargarDashboard();
   actualizarBuscadorTomSelect();
 }
@@ -431,7 +431,7 @@ function generarPDF() {
 
   doc.setFontSize(18);
   doc.setTextColor(31, 35, 40); 
-  doc.text("Reporte de Ingresos - Sastrería Natalli's", 14, 20);
+  doc.text("Reporte de Ingresos - Sastrería Natallis", 14, 20);
 
   const desde = document.getElementById('fechaDesde').value || "Histórico completo";
   const hasta = document.getElementById('fechaHasta').value || "Hoy";
@@ -456,14 +456,14 @@ function generarPDF() {
     let fechaTextoPlano = fechaHtml.replace(/<[^>]*>?/gm, ' ').trim(); 
 
     return [
-      fila[0], // Boleta
-      fechaTextoPlano, // Fecha
-      fila[8], // Categoría
-      `S/ ${fila[2].toFixed(2)}`, // Total
-      `S/ ${fila[3].toFixed(2)}`, // A Cuenta
-      `S/ ${fila[4].toFixed(2)}`, // Saldo
-      fila[7], // Método
-      fila[5]  // Estado
+      fila[0], 
+      fechaTextoPlano, 
+      fila[8], 
+      `S/ ${fila[2].toFixed(2)}`, 
+      `S/ ${fila[3].toFixed(2)}`, 
+      `S/ ${fila[4].toFixed(2)}`, 
+      fila[7], 
+      fila[5]  
     ];
   });
 
