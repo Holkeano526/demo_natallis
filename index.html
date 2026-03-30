@@ -104,7 +104,7 @@
               <span class="material-symbols-rounded">check_circle</span> Marcar como Entregada
             </h3>
             <div class="form-group">
-              <select id="boletaEntrega" placeholder="🔍 Buscar N° de boleta pendiente..."></select>
+              <select id="boletaEntrega" placeholder="Buscar N° de boleta pendiente..."></select>
             </div>
             <button onclick="entregarPrenda()" class="btn-secundario">
               <span class="material-symbols-rounded">task_alt</span> Confirmar Entrega y Cobrar Saldo
@@ -127,7 +127,7 @@
                 <label class="small-label">Hasta (Domingo):</label>
                 <input type="date" id="fechaHasta" onchange="cargarDashboard()">
               </div>
-              <div class="flex-item" style="flex: 0.5; display: flex; gap: 10px;">
+              <div class="flex-item" style="flex: 1; display: flex; gap: 10px;">
                 <button class="btn-secundario" onclick="limpiarFechas()" style="flex: 1;"><span class="material-symbols-rounded">calendar_month</span> Todo</button>
                 <button onclick="generarPDF()" style="flex: 1; background-color: #dc3545; color: white; margin-top: 0;"><span class="material-symbols-rounded">picture_as_pdf</span> PDF</button>
               </div>
