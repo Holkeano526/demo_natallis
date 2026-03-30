@@ -419,3 +419,64 @@ function renderizarControlesPaginacion() {
   html += `<button class="btn-pag" onclick="cambiarPagina(1)" ${paginaActual === totalPaginas ? 'disabled' : ''}><span class="material-symbols-rounded">chevron_right</span></button>`;
   contenedor.innerHTML = html;
 }
+
+function generarPDF() {
+  if (datosFiltradosGlobal.length === 0) {
+    Swal.fire({ icon: 'info', title: 'Tabla vacía', text: 'No hay registros en este rango de fechas para exportar.', confirmButtonColor: '#2b3035' });
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  doc.setFontSize(18);
+  doc.setTextColor(31, 35, 40); 
+  doc.text("Reporte de Ingresos - Sastrería Natalli's", 14, 20);
+
+  const desde = document.getElementById('fechaDesde').value || "Histórico completo";
+  const hasta = document.getElementById('fechaHasta').value || "Hoy";
+  doc.setFontSize(11);
+  doc.setTextColor(100, 100, 100);
+  doc.text(`Periodo evaluado: ${desde} al ${hasta}`, 14, 28);
+
+  const totalVentas = document.getElementById('sumTotalVentas').innerText;
+  const caja = document.getElementById('sumIngresosReales').innerText;
+  const cobrar = document.getElementById('sumPorCobrar').innerText;
+
+  doc.setFontSize(11);
+  doc.setTextColor(0, 0, 0);
+  doc.text(`Total Ventas (Devengado): ${totalVentas}`, 14, 40);
+  doc.setTextColor(40, 167, 69); 
+  doc.text(`Ingresos Reales (Caja): ${caja}`, 85, 40);
+  doc.setTextColor(220, 53, 69); 
+  doc.text(`Por Cobrar (Pendiente): ${cobrar}`, 150, 40);
+
+  const bodyData = datosFiltradosGlobal.map(fila => {
+    let fechaHtml = formatearFechaTabla(fila[6], fila[1]);
+    let fechaTextoPlano = fechaHtml.replace(/<[^>]*>?/gm, ' ').trim(); 
+
+    return [
+      fila[0], // Boleta
+      fechaTextoPlano, // Fecha
+      fila[8], // Categoría
+      `S/ ${fila[2].toFixed(2)}`, // Total
+      `S/ ${fila[3].toFixed(2)}`, // A Cuenta
+      `S/ ${fila[4].toFixed(2)}`, // Saldo
+      fila[7], // Método
+      fila[5]  // Estado
+    ];
+  });
+
+  doc.autoTable({
+    startY: 48,
+    head: [['Boleta', 'Fecha', 'Categoría', 'Total', 'A Cuenta', 'Saldo', 'Método', 'Estado']],
+    body: bodyData,
+    theme: 'grid',
+    headStyles: { fillColor: [43, 48, 53] }, 
+    styles: { fontSize: 9 },
+    alternateRowStyles: { fillColor: [244, 247, 246] }
+  });
+
+  let nombreArchivo = `Reporte_Natallis_${desde}_al_${hasta}.pdf`.replace(/\//g, '-');
+  doc.save(nombreArchivo);
+}
