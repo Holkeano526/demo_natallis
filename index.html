@@ -10,6 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.default.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet" />
@@ -125,8 +127,9 @@
                 <label class="small-label">Hasta (Domingo):</label>
                 <input type="date" id="fechaHasta" onchange="cargarDashboard()">
               </div>
-              <div class="flex-item" style="flex: 0.5;">
-                <button class="btn-secundario" onclick="limpiarFechas()"><span class="material-symbols-rounded">calendar_month</span> Todo</button>
+              <div class="flex-item" style="flex: 0.5; display: flex; gap: 10px;">
+                <button class="btn-secundario" onclick="limpiarFechas()" style="flex: 1;"><span class="material-symbols-rounded">calendar_month</span> Todo</button>
+                <button onclick="generarPDF()" style="flex: 1; background-color: #dc3545; color: white; margin-top: 0;"><span class="material-symbols-rounded">picture_as_pdf</span> PDF</button>
               </div>
             </div>
           </div>
