@@ -111,26 +111,53 @@
             </button>
           </div>
 
-          <h3><span class="material-symbols-rounded">monitoring</span> Cuadre Semanal y Búsqueda</h3>
+          <h3><span class="material-symbols-rounded">monitoring</span> Cuadre y Reportes</h3>
           
           <div class="panel-filtros">
+            
+            <div class="filter-switch-container">
+              <span class="filter-switch-label active" id="labelBoletas" onclick="toggleTipoFiltro(false)">Filtrar por Rango de Boletas</span>
+              <label class="switch">
+                <input type="checkbox" id="switchTipoFiltro" onchange="toggleTipoFiltro(this.checked)">
+                <span class="slider"></span>
+              </label>
+              <span class="filter-switch-label" id="labelFechas" onclick="toggleTipoFiltro(true)">Filtrar por Fechas</span>
+            </div>
+
             <div class="flex-row" style="align-items: flex-end;">
-              <div class="flex-item" style="flex: 2; min-width: 250px;">
-                <label class="small-label"><span class="material-symbols-rounded" style="font-size: 14px;">search</span> Buscar Boleta o Categoría:</label>
-                <input type="text" id="buscarBoleta" oninput="buscarConRetraso()" placeholder="N° Boleta o Categoría...">
+              
+              <div class="flex-item" style="flex: 1.5; min-width: 200px;">
+                <label class="small-label"><span class="material-symbols-rounded" style="font-size: 14px;">search</span> Buscar (Ej: Saco, 80598):</label>
+                <input type="text" id="buscarBoleta" oninput="buscarConRetraso()" placeholder="Búsqueda rápida...">
               </div>
-              <div class="flex-item">
-                <label class="small-label">Desde (Lunes):</label>
-                <input type="date" id="fechaDesde" onchange="cargarDashboard()">
+
+              <div id="grupoFiltroBoletas" class="filter-group active">
+                <div class="flex-item">
+                  <label class="small-label">Desde Boleta N°:</label>
+                  <input type="number" id="boletaDesde" oninput="buscarConRetraso()" placeholder="Ej: 80500">
+                </div>
+                <div class="flex-item">
+                  <label class="small-label">Hasta Boleta N°:</label>
+                  <input type="number" id="boletaHasta" oninput="buscarConRetraso()" placeholder="Ej: 80599">
+                </div>
               </div>
-              <div class="flex-item">
-                <label class="small-label">Hasta (Domingo):</label>
-                <input type="date" id="fechaHasta" onchange="cargarDashboard()">
+
+              <div id="grupoFiltroFechas" class="filter-group">
+                <div class="flex-item">
+                  <label class="small-label">Desde (Lunes):</label>
+                  <input type="date" id="fechaDesde" onchange="cargarDashboard()">
+                </div>
+                <div class="flex-item">
+                  <label class="small-label">Hasta (Domingo):</label>
+                  <input type="date" id="fechaHasta" onchange="cargarDashboard()">
+                </div>
               </div>
-              <div class="flex-item" style="flex: 1; display: flex; gap: 10px;">
-                <button class="btn-secundario" onclick="limpiarFechas()" style="flex: 1;"><span class="material-symbols-rounded">calendar_month</span> Todo</button>
+
+              <div class="flex-item" style="flex: 1; min-width: 150px; display: flex; gap: 10px;">
+                <button class="btn-secundario" onclick="limpiarFiltros()" style="flex: 1;"><span class="material-symbols-rounded">filter_alt_off</span> Limpiar</button>
                 <button onclick="generarPDF()" style="flex: 1; background-color: #dc3545; color: white; margin-top: 0;"><span class="material-symbols-rounded">picture_as_pdf</span> PDF</button>
               </div>
+              
             </div>
           </div>
 
