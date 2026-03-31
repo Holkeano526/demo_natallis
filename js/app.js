@@ -9,7 +9,7 @@ let timeoutBusqueda;
 let datosFiltradosGlobal = [];
 let paginaActual = 1;
 const filasPorPagina = 10;
-let ordenActual = { columna: 'fecha', ascendente: false };
+let ordenActual = { columna: 'boleta', ascendente: false };
 
 function llamadaApi(action, payload = {}) {
   return fetch(SCRIPT_URL, {
@@ -108,12 +108,57 @@ function cerrarSesion() {
   window.location.reload(); 
 }
 
+function toggleTipoFiltro(usarFechas) {
+  const switchElement = document.getElementById('switchTipoFiltro');
+  const grupoFechas = document.getElementById('grupoFiltroFechas');
+  const grupoBoletas = document.getElementById('grupoFiltroBoletas');
+  const labelFechas = document.getElementById('labelFechas');
+  const labelBoletas = document.getElementById('labelBoletas');
+
+  if (switchElement.checked !== usarFechas) {
+    switchElement.checked = usarFechas;
+  }
+
+  if (usarFechas) {
+    grupoFechas.classList.add('active');
+    grupoBoletas.classList.remove('active');
+    labelFechas.classList.add('active');
+    labelBoletas.classList.remove('active');
+    
+    document.getElementById('boletaDesde').value = "";
+    document.getElementById('boletaHasta').value = "";
+  } else {
+    grupoBoletas.classList.add('active');
+    grupoFechas.classList.remove('active');
+    labelBoletas.classList.add('active');
+    labelFechas.classList.remove('active');
+
+    document.getElementById('fechaDesde').value = "";
+    document.getElementById('fechaHasta').value = "";
+  }
+
+  cargarDashboard(); 
+}
+
+function limpiarFiltros() {
+  document.getElementById('buscarBoleta').value = "";
+  document.getElementById('boletaDesde').value = "";
+  document.getElementById('boletaHasta').value = "";
+  document.getElementById('fechaDesde').value = "";
+  document.getElementById('fechaHasta').value = "";
+  cargarDashboard();
+}
+
 function establecerSemanaActual() {
   let hoy = new Date(); let diaSemana = hoy.getDay(); let diasParaLunes = diaSemana === 0 ? 6 : diaSemana - 1; 
   let lunes = new Date(hoy); lunes.setDate(hoy.getDate() - diasParaLunes);
   let domingo = new Date(lunes); domingo.setDate(lunes.getDate() + 6);
+  
   document.getElementById('fechaDesde').value = formatearFecha(lunes);
   document.getElementById('fechaHasta').value = formatearFecha(domingo);
+  
+  document.getElementById('switchTipoFiltro').checked = false;
+  toggleTipoFiltro(false);
 }
 
 function formatearFecha(fecha) {
@@ -207,11 +252,6 @@ function actualizarBuscadorTomSelect() {
   buscadorEntregas.addOptions(opciones.slice(0, 300));
 }
 
-function limpiarFechas() {
-  document.getElementById('fechaDesde').value = ""; document.getElementById('fechaHasta').value = ""; document.getElementById('buscarBoleta').value = "";
-  cargarDashboard();
-}
-
 function buscarConRetraso() { clearTimeout(timeoutBusqueda); timeoutBusqueda = setTimeout(cargarDashboard, 300); }
 
 function abrirModalEdicion(boleta, precio, acuenta, metodo, categoria) {
@@ -297,18 +337,34 @@ function formatearFechaTabla(timestamp, textoOriginal) {
 
 function cargarDashboard() {
   let textoBusqueda = document.getElementById('buscarBoleta').value.toLowerCase().trim();
-  let strDesde = document.getElementById('fechaDesde').value; let strHasta = document.getElementById('fechaHasta').value;
-  let tsDesde = strDesde ? new Date(strDesde + "T00:00:00").getTime() : 0; let tsHasta = strHasta ? new Date(strHasta + "T23:59:59").getTime() : Infinity;
+  
+  let strDesde = document.getElementById('fechaDesde').value; 
+  let strHasta = document.getElementById('fechaHasta').value;
+  let tsDesde = strDesde ? new Date(strDesde + "T00:00:00").getTime() : 0; 
+  let tsHasta = strHasta ? new Date(strHasta + "T23:59:59").getTime() : Infinity;
+
+  let bDesdeInput = document.getElementById('boletaDesde').value;
+  let bHastaInput = document.getElementById('boletaHasta').value;
+  let numBoletaDesde = bDesdeInput ? parseInt(bDesdeInput) : 0;
+  let numBoletaHasta = bHastaInput ? parseInt(bHastaInput) : Infinity;
 
   let contTotal = 0, contEntregado = 0, contPendiente = 0;
   let dineroTotalVentas = 0, dineroIngresosCaja = 0, dineroPorCobrar = 0;    
   let ingresosPorCategoria = {}; let filtrados = [];
 
   todosLosDatos.forEach(fila => {
-    let numeroBoleta = String(fila[0]).toLowerCase(); let categoriaFila = String(fila[8] || "Sin categoría").trim(); let tsFila = fila[6]; 
-    if (textoBusqueda !== "" && !numeroBoleta.includes(textoBusqueda) && !categoriaFila.toLowerCase().includes(textoBusqueda)) return;
+    let numeroBoletaTexto = String(fila[0]).toLowerCase(); 
+    let numeroBoletaInt = parseInt(fila[0]) || 0;
+    let categoriaFila = String(fila[8] || "Sin categoría").trim(); 
+    let tsFila = fila[6]; 
+    
+    if (textoBusqueda !== "" && !numeroBoletaTexto.includes(textoBusqueda) && !categoriaFila.toLowerCase().includes(textoBusqueda)) return;
+    
     if (tsDesde > 0 && tsFila < tsDesde) return;
     if (tsHasta !== Infinity && tsFila > tsHasta) return;
+
+    if (numeroBoletaInt < numBoletaDesde) return;
+    if (numeroBoletaInt > numBoletaHasta) return;
 
     contTotal++; dineroTotalVentas += fila[2]; dineroIngresosCaja += fila[3]; dineroPorCobrar += fila[4];    
     if (fila[5] === "Entregado") contEntregado++; else contPendiente++;
@@ -351,7 +407,7 @@ function cargarDashboard() {
               </div>`;
       }
   }
-  if(htmlCategorias === "") htmlCategorias = "<p style='color:#6c757d; width:100%; text-align:center;'>No hay ingresos registrados en este rango de fechas.</p>";
+  if(htmlCategorias === "") htmlCategorias = "<p style='color:#6c757d; width:100%; text-align:center;'>No hay ingresos registrados en este rango.</p>";
   document.getElementById('resumenCategorias').innerHTML = htmlCategorias;
 
   datosFiltradosGlobal = filtrados; paginaActual = 1; renderizarTablaPaginada();
@@ -422,7 +478,7 @@ function renderizarControlesPaginacion() {
 
 function generarPDF() {
   if (datosFiltradosGlobal.length === 0) {
-    Swal.fire({ icon: 'info', title: 'Tabla vacía', text: 'No hay registros en este rango de fechas para exportar.', confirmButtonColor: '#2b3035' });
+    Swal.fire({ icon: 'info', title: 'Tabla vacía', text: 'No hay registros en este rango para exportar.', confirmButtonColor: '#2b3035' });
     return;
   }
 
@@ -433,11 +489,21 @@ function generarPDF() {
   doc.setTextColor(31, 35, 40); 
   doc.text("Reporte de Ingresos - Sastrería Natallis", 14, 20);
 
-  const desde = document.getElementById('fechaDesde').value || "Histórico completo";
-  const hasta = document.getElementById('fechaHasta').value || "Hoy";
+  let textoRango = "";
+  const usaFechas = document.getElementById('switchTipoFiltro').checked;
+  if(usaFechas) {
+    const d = document.getElementById('fechaDesde').value || "-";
+    const h = document.getElementById('fechaHasta').value || "-";
+    textoRango = `Periodo: ${d} al ${h}`;
+  } else {
+    const d = document.getElementById('boletaDesde').value || "Inicio";
+    const h = document.getElementById('boletaHasta').value || "Final";
+    textoRango = `Rango Boletas: ${d} al ${h}`;
+  }
+
   doc.setFontSize(11);
   doc.setTextColor(100, 100, 100);
-  doc.text(`Periodo evaluado: ${desde} al ${hasta}`, 14, 28);
+  doc.text(textoRango, 14, 28);
 
   const totalVentas = document.getElementById('sumTotalVentas').innerText;
   const caja = document.getElementById('sumIngresosReales').innerText;
@@ -477,6 +543,6 @@ function generarPDF() {
     alternateRowStyles: { fillColor: [244, 247, 246] }
   });
 
-  let nombreArchivo = `Reporte_Natallis_${desde}_al_${hasta}.pdf`.replace(/\//g, '-');
+  let nombreArchivo = `Reporte_Natallis.pdf`;
   doc.save(nombreArchivo);
 }
