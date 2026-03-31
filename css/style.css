@@ -108,9 +108,9 @@ tbody tr:hover { background-color: rgba(255, 226, 44, 0.05); }
 .btn-bulk { width: auto; margin: 0; background-color: var(--dark-bg); color: white; padding: 10px 16px; font-size: 14px; }
 .ts-wrapper.single .ts-control { padding: 12px !important; border-radius: 8px !important; font-size: 15px !important; height: auto;}
 
+/* ESTILOS DEL LOGIN ANIMADO Y ABSTRACTO */
 #loginOverlay {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  /* Fondo mesh degradado animado */
   background: 
     radial-gradient(circle at 15% 50%, rgba(255, 226, 44, 0.15), transparent 25%),
     radial-gradient(circle at 85% 30%, rgba(255, 226, 44, 0.1), transparent 25%),
@@ -128,14 +128,12 @@ tbody tr:hover { background-color: rgba(255, 226, 44, 0.05); }
 }
 
 .login-box {
-  /* Efecto cristal (Glassmorphism) elegante */
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   padding: 45px 35px; border-radius: 20px;
   width: 90%; max-width: 400px; text-align: center;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
-  /* Animación de entrada flotante */
   animation: floatIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -146,6 +144,73 @@ tbody tr:hover { background-color: rgba(255, 226, 44, 0.05); }
 
 #appContent { display: none; } 
 
+.filter-switch-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: var(--gray-light);
+  border-radius: 12px;
+}
+.filter-switch-label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #6c757d;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.filter-switch-label.active {
+  color: var(--dark-text);
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #cbd5e1;
+  transition: .4s;
+  border-radius: 34px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+input:checked + .slider {
+  background-color: var(--dark-bg);
+}
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+.filter-group {
+  display: none; 
+  flex: 2;
+  gap: 15px;
+}
+.filter-group.active {
+  display: flex;
+}
+
 @media (max-width: 768px) {
   body { padding: 10px; }
   .container { padding: 15px; }
@@ -154,4 +219,5 @@ tbody tr:hover { background-color: rgba(255, 226, 44, 0.05); }
   .flex-item { width: 100%; min-width: 100%; }
   .btn-secundario, .btn-bulk { margin-top: 5px; width: 100%; }
   .header-tabla-acciones { flex-direction: column; align-items: stretch; gap: 15px; }
+  .filter-group { flex-direction: column; }
 }
