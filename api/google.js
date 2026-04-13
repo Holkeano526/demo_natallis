@@ -1,4 +1,5 @@
 export default async function handler(req, res) {
+  // 1. PEGA AQUÍ LA URL QUE ACABAS DE COPIAR
   const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxH5YvXMsQSmIFoH0LjjsY0ZWjMfTL7NMmu3fGgqLZ363_5IrvSFZ_JJHXHJZYqjh8kpQ/exec";
 
   const SECRET_PASSWORD = process.env.APP_PASSWORD;
@@ -12,9 +13,10 @@ export default async function handler(req, res) {
   delete bodyData.password; 
 
   if (!SECRET_PASSWORD) {
-    return res.status(401).json({ status: "error", data: "Sistema no configurado: APP_PASSWORD ausente en Vercel." });
+    return res.status(401).json({ status: "error", data: "Falta configurar APP_PASSWORD en Vercel." });
   }
 
+  // Validación de la nueva contraseña
   if (password !== SECRET_PASSWORD) {
     return res.status(401).json({ status: "error", data: "Contraseña incorrecta." });
   }
@@ -27,16 +29,20 @@ export default async function handler(req, res) {
     });
 
     const textResponse = await googleResponse.text();
-    let data;
+    
     try {
-      data = JSON.parse(textResponse);
+      // Si Google responde bien, esto será JSON
+      const data = JSON.parse(textResponse);
+      return res.status(200).json(data);
     } catch (e) {
-      return res.status(500).json({ status: "error", data: "Error leyendo datos de Google: " + textResponse.substring(0, 80) });
+      // Si entra aquí, es porque Google envió el HTML de login
+      return res.status(500).json({ 
+        status: "error", 
+        data: "Permisos insuficientes: Configura el Script de Google para acceso de 'Cualquier persona'." 
+      });
     }
-
-    return res.status(200).json(data);
     
   } catch (error) {
-    return res.status(500).json({ status: "error", data: "Fallo en el servidor: " + error.message });
+    return res.status(500).json({ status: "error", data: "Error de red: " + error.message });
   }
 }
