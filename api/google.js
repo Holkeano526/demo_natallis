@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyI6gcaiR4mEKGP594j3meC4QFiaQcgvT-3Bq5djbA0k69P3FgwoWSvff5plzQv8icM/exec";
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzUCG_4EWIOaYK_vFkJrVSPaeX7fztJSQHXAMRThfZ8Pcc6DaiU87OL70ka3Xw2bupEcg/exec";
 
   const SECRET_PASSWORD = process.env.APP_PASSWORD;
 
