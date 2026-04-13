@@ -229,7 +229,7 @@ function entregarPrenda() {
   
   Swal.fire({title: 'Procesando...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
 
-  llamadaApi("actualizarEstado", { boleta: num }).then(res => {
+  llamadaApi("actualizarEstado", { numeroBoleta: num }).then(res => {
     Swal.fire({ icon: 'success', title: 'Entregado', text: res, timer: 2000, showConfirmButton: false });
     buscadorEntregas.clear(); cargarDatosDesdeServidor(); 
   }).catch(err => Swal.fire('Error', err.message, 'error'));
@@ -269,6 +269,7 @@ function abrirModalEdicion(boleta, precio, acuenta, metodo, categoria) {
 
 function cerrarModal() { document.getElementById('modalEditar').classList.remove('active'); }
 
+// 🌟 FUNCIÓN DE EDICIÓN MODIFICADA
 function guardarEdicion(e) {
   e.preventDefault();
   var precio = parseFloat(document.getElementById('editPrecio').value) || 0;
@@ -277,16 +278,54 @@ function guardarEdicion(e) {
   
   if (acuenta > precio) { Swal.fire({ icon: 'error', title: 'Error', text: 'El monto A Cuenta corregido no puede ser mayor al Precio Total.', confirmButtonColor: '#2b3035' }); return; }
 
-  var btn = e.target.querySelector('button[type="submit"]');
-  btn.innerHTML = '<span class="material-symbols-rounded">hourglass_empty</span> Actualizando...'; btn.disabled = true;
+  var datos = { 
+    boletaOriginal: document.getElementById('editBoletaOriginal').value, 
+    boletaNueva: document.getElementById('editBoletaNueva').value, 
+    precio: precio, 
+    acuenta: acuenta, 
+    metodoPago: document.getElementById('editMetodo').value, 
+    categoria: categoria,
+    estado: "Mantener" 
+  };
 
-  var datos = { boletaOriginal: document.getElementById('editBoletaOriginal').value, boletaNueva: document.getElementById('editBoletaNueva').value, precio: precio, acuenta: acuenta, metodoPago: document.getElementById('editMetodo').value, categoria: categoria };
+  if (precio > 0 && acuenta === precio) {
+    Swal.fire({
+      title: 'Pago Total Detectado',
+      text: `El saldo es S/ 0.00. ¿Deseas marcar la boleta como ENTREGADA automáticamente?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#ffe22c',
+      cancelButtonColor: '#2b3035',
+      confirmButtonText: 'Sí, Entregada',
+      cancelButtonText: 'No, dejar igual'
+    }).then((result) => {
+      datos.estado = result.isConfirmed ? "Entregado" : "Mantener";
+      ejecutarLlamadaEdicion(datos, e.target);
+    });
+  } else {
+    ejecutarLlamadaEdicion(datos, e.target);
+  }
+}
+
+// 🌟 FUNCIÓN AUXILIAR DE EDICIÓN
+function ejecutarLlamadaEdicion(datos, formTarget) {
+  var btn = formTarget.querySelector('button[type="submit"]');
+  btn.innerHTML = '<span class="material-symbols-rounded">hourglass_empty</span> Actualizando...'; 
+  btn.disabled = true;
 
   llamadaApi("editarBoleta", { datos: datos }).then(res => {
-    if(!res.startsWith("Error")) { Swal.fire({ icon: 'success', title: 'Actualizado', text: res, timer: 2000, showConfirmButton: false }); cerrarModal(); cargarDatosDesdeServidor(); } 
-    else { Swal.fire({ icon: 'error', title: 'Oops...', text: res, confirmButtonColor: '#2b3035' }); }
+    if(!res.startsWith("Error")) { 
+      Swal.fire({ icon: 'success', title: 'Actualizado', text: res, timer: 2000, showConfirmButton: false }); 
+      cerrarModal(); 
+      cargarDatosDesdeServidor(); 
+    } else { 
+      Swal.fire({ icon: 'error', title: 'Oops...', text: res, confirmButtonColor: '#2b3035' }); 
+    }
   }).catch(err => Swal.fire('Error', err.message, 'error'))
-  .finally(() => { btn.innerHTML = '<span class="material-symbols-rounded">sync</span> Guardar Cambios'; btn.disabled = false; });
+  .finally(() => { 
+    btn.innerHTML = '<span class="material-symbols-rounded">sync</span> Guardar Cambios'; 
+    btn.disabled = false; 
+  });
 }
 
 function toggleTodos(source) {
@@ -304,9 +343,26 @@ function marcarSeleccionados() {
   }).then((result) => {
     if (result.isConfirmed) {
       Swal.fire({title: 'Procesando...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
-      llamadaApi("actualizarBoletasBulk", { boletas: seleccionados }).then(respuesta => {
+      llamadaApi("actualizarBoletasBulk", { listaBoletas: seleccionados }).then(respuesta => {
           Swal.fire({ icon: 'success', title: 'Completado', text: respuesta, timer: 2500, showConfirmButton: false });
           cargarDatosDesdeServidor(); 
+      }).catch(err => Swal.fire('Error', err.message, 'error'));
+    }
+  });
+}
+
+// 🌟 NUEVA FUNCIÓN PARA RELLENAR FALTANTES
+function ejecutarRellenoFaltantes() {
+  Swal.fire({
+    title: '¿Rellenar boletas faltantes?',
+    text: 'Se buscarán los huecos en la secuencia y se rellenarán automáticamente con S/ 0.00.',
+    icon: 'warning', showCancelButton: true, confirmButtonColor: '#2b3035', confirmButtonText: 'Sí, rellenar secuencia'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire({title: 'Buscando huecos...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
+      llamadaApi("rellenar", {}).then(res => {
+        Swal.fire({ icon: 'success', title: 'Completado', text: res, confirmButtonColor: '#ffe22c' });
+        cargarDatosDesdeServidor(); 
       }).catch(err => Swal.fire('Error', err.message, 'error'));
     }
   });
