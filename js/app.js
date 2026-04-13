@@ -229,7 +229,7 @@ function entregarPrenda() {
   
   Swal.fire({title: 'Procesando...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
 
-  llamadaApi("actualizarEstado", { numeroBoleta: num }).then(res => {
+  llamadaApi("actualizarEstado", { boleta: num }).then(res => {
     Swal.fire({ icon: 'success', title: 'Entregado', text: res, timer: 2000, showConfirmButton: false });
     buscadorEntregas.clear(); cargarDatosDesdeServidor(); 
   }).catch(err => Swal.fire('Error', err.message, 'error'));
@@ -269,7 +269,6 @@ function abrirModalEdicion(boleta, precio, acuenta, metodo, categoria) {
 
 function cerrarModal() { document.getElementById('modalEditar').classList.remove('active'); }
 
-// 🌟 FUNCIÓN DE EDICIÓN MODIFICADA
 function guardarEdicion(e) {
   e.preventDefault();
   var precio = parseFloat(document.getElementById('editPrecio').value) || 0;
@@ -307,7 +306,6 @@ function guardarEdicion(e) {
   }
 }
 
-// 🌟 FUNCIÓN AUXILIAR DE EDICIÓN
 function ejecutarLlamadaEdicion(datos, formTarget) {
   var btn = formTarget.querySelector('button[type="submit"]');
   btn.innerHTML = '<span class="material-symbols-rounded">hourglass_empty</span> Actualizando...'; 
@@ -343,7 +341,7 @@ function marcarSeleccionados() {
   }).then((result) => {
     if (result.isConfirmed) {
       Swal.fire({title: 'Procesando...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
-      llamadaApi("actualizarBoletasBulk", { listaBoletas: seleccionados }).then(respuesta => {
+      llamadaApi("actualizarBoletasBulk", { boletas: seleccionados }).then(respuesta => {
           Swal.fire({ icon: 'success', title: 'Completado', text: respuesta, timer: 2500, showConfirmButton: false });
           cargarDatosDesdeServidor(); 
       }).catch(err => Swal.fire('Error', err.message, 'error'));
@@ -351,7 +349,6 @@ function marcarSeleccionados() {
   });
 }
 
-// 🌟 NUEVA FUNCIÓN PARA RELLENAR FALTANTES
 function ejecutarRellenoFaltantes() {
   Swal.fire({
     title: '¿Rellenar boletas faltantes?',
